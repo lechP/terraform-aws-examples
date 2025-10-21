@@ -1,0 +1,42 @@
+name: Deploy (hello)
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment"
+        required: true
+        default: "dev"
+        type: choice
+        options: [ "dev", "stage", "prod" ]
+  push:
+    tags:
+      - "v*.*.*"   # optional: deploy on version tags
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment || 'dev' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy placeholder
+        run: |
+          chmod +x scripts/hello_deploy.sh
+          scripts/hello_deploy.sh "${{ inputs.environment || 'dev' }}"
+
+      # --- Future (Terraform) example ---
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v4
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: eu-central-1
+      #
+      # - name: Terraform apply
+      #   run: |
+      #     terraform init
+      #     terraform plan -out=tfplan
+      #     terraform apply -auto-approve tfplan
+

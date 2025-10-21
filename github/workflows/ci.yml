@@ -1,0 +1,32 @@
+name: Hello CI
+
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+    branches: [ "**" ]
+
+jobs:
+  hello:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Say hello
+        run: |
+          chmod +x scripts/hello_ci.sh
+          scripts/hello_ci.sh
+
+      # --- Future (Terraform) example ---
+      # - name: Setup Terraform
+      #   uses: hashicorp/setup-terraform@v3
+      #   with:
+      #     terraform_version: 1.9.8
+      #
+      # - name: Terraform fmt & validate
+      #   run: |
+      #     terraform fmt -check -diff || true
+      #     terraform init -backend=false
+      #     terraform validate
+

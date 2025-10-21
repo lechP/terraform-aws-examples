@@ -1,0 +1,24 @@
+# General
+.DS_Store
+*.log
+*.tmp
+.tmp/
+.cache/
+
+# Node
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+override.tf
+.override.tf
+terraform.tfvars
+
