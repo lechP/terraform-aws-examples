@@ -22,3 +22,5 @@ override.tf
 .override.tf
 terraform.tfvars
 
+.idea
+
