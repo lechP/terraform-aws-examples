@@ -69,29 +69,29 @@ resource "aws_instance" "hello" {
   associate_public_ip_address = true
 
   user_data = <<-EOF
-              #!/bin/bash
-              yum install -y httpd
-              systemctl enable httpd
-              systemctl start httpd
+            #!/bin/bash
+            yum install -y httpd
+            systemctl enable httpd
+            systemctl start httpd
 
-              HOSTNAME=$(hostname)
-              TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
-              GIT_COMMIT="${var.git_commit}"
+            HOSTNAME=$(hostname)
+            TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+            GIT_COMMIT="${var.git_commit}"
 
-              cat <<HTML > /var/www/html/index.html
-              <html>
-              <head><title>Hello from Terraform</title></head>
-              <body>
-                <h1>Hello from Terraform!</h1>
-                <ul>
-                  <li><b>Git commit SHA:</b> ${GIT_COMMIT}</li>
-                  <li><b>Timestamp:</b> ${TIMESTAMP}</li>
-                  <li><b>Hostname:</b> ${HOSTNAME}</li>
-                </ul>
-              </body>
-              </html>
-              HTML
-              EOF
+            cat <<'HTML' > /var/www/html/index.html
+            <html>
+            <head><title>Hello from Terraform</title></head>
+            <body>
+              <h1>Hello from Terraform!</h1>
+              <ul>
+                <li><b>Git commit SHA:</b> ${GIT_COMMIT}</li>
+                <li><b>Timestamp:</b> ${TIMESTAMP}</li>
+                <li><b>Hostname:</b> ${HOSTNAME}</li>
+              </ul>
+            </body>
+            </html>
+            HTML
+            EOF
 
   tags = {
     Name = "hello-from-terraform"
