@@ -27,6 +27,8 @@ jobs:
           terraform_version: 1.13.5
 
       - name: Terraform
+        env:
+          GIT_COMMIT: ${{ github.sha }}
         run: |
           terraform --version
           terraform init

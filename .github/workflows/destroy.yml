@@ -1,38 +1,33 @@
-name: Destroy (hello)
+name: Destroy
 
 on:
   workflow_dispatch:
-    inputs:
-      environment:
-        description: "Target environment to tear down"
-        required: true
-        default: "dev"
-        type: choice
-        options: [ "dev", "stage", "prod" ]
+
+permissions:
+  id-token: write   # REQUIRED for OIDC
+  contents: read
 
 jobs:
   destroy:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Destroy placeholder
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.ACCOUNT_ID }}:role/TerraformCiRole
+          aws-region: eu-west-3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.13.5
+
+      - name: Terraform Destroy
         run: |
-          chmod +x scripts/hello_destroy.sh
-          scripts/hello_destroy.sh "${{ inputs.environment }}"
-
-      # --- Future (Terraform) example ---
-      # - name: Configure AWS credentials
-      #   uses: aws-actions/configure-aws-credentials@v4
-      #   with:
-      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     aws-region: eu-central-1
-      #
-      # - name: Terraform destroy
-      #   run: |
-      #     terraform init
-      #     terraform destroy -auto-approve
-
+          terraform --version
+          terraform init
+          terraform destroy -auto-approve
