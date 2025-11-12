@@ -62,10 +62,10 @@ data "aws_subnet" "default" {
 
 # EC2 instance
 resource "aws_instance" "hello" {
-  ami           = data.aws_ami.amazon_linux.id
-  instance_type = "t3.micro"
-  subnet_id     = data.aws_subnet.default.id
-  vpc_security_group_ids = [aws_security_group.hello_sg.id]
+  ami                         = data.aws_ami.amazon_linux.id
+  instance_type               = "t3.micro"
+  subnet_id                   = data.aws_subnet.default.id
+  vpc_security_group_ids      = [aws_security_group.hello_sg.id]
   associate_public_ip_address = true
 
   user_data = <<-EOF
