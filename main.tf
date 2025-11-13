@@ -85,8 +85,7 @@ resource "aws_instance" "hello" {
             TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
             GIT_COMMIT="${var.git_commit}"
 
-            # Quote the heredoc delimiter so Bash writes the literal $${...} expressions
-            cat <<'HTML' > /var/www/html/index.html
+            cat <<HTML > /var/www/html/index.html
             <html>
             <head><title>Hello from Terraform</title></head>
             <body>
