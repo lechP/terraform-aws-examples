@@ -17,11 +17,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Say hello
-        run: |
-          chmod +x scripts/hello_ci.sh
-          scripts/hello_ci.sh
-
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
