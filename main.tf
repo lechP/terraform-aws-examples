@@ -92,7 +92,7 @@ resource "aws_instance" "hello" {
               <h1>Hello from Terraform!</h1>
               <ul>
                 <li><b>Git commit SHA:</b> $${GIT_COMMIT}</li>
-                <li><b>Timestamp:</b> $${TIMESTAMP}</li>
+                <li><b>Startup timestamp:</b> $${TIMESTAMP}</li>
                 <li><b>Hostname:</b> $${HOSTNAME}</li>
               </ul>
             </body>
