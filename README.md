@@ -1,18 +1,9 @@
-# Hello CI/CD (Template)
+# Terraform AWS Examples
 
-Minimal GitHub Actions CI/CD to be expanded into Terraform later.
+Currently, a simple example of launching an EC2 instance with Terraform, plus GitHub Actions workflows to validate, deploy, and destroy.
+Goal is to provide multiple examples of AWS based infrastructure as code.
 
 ## Workflows
-- **CI** (`.github/workflows/ci.yml`): Runs on PRs/pushes, prints “hello world”.
-- **Deploy** (`.github/workflows/deploy.yml`): Manual or on tags; placeholder for provisioning later.
-- **Destroy** (`.github/workflows/destroy.yml`): Manual; placeholder for teardown later.
-
-### Quick start
-1. Create the repo and push (see commands below).
-2. Open the **Actions** tab and run:
-   - **Hello CI**: happens automatically on push/PR.
-   - **Deploy (hello)**: **Run workflow** → pick an environment (dev/stage/prod).
-   - **Destroy (hello)**: **Run workflow** → pick the same environment.
-
-> When ready for Terraform, replace the `scripts/hello_*.sh` bodies (or commented steps in workflows) with `terraform init/plan/apply/destroy` and wire secrets via repo **Settings → Secrets and variables → Actions**.
-
+- **Validate** (`.github/workflows/validate.yml`): Validates Terraform code on push/PR.
+- **Deploy** (`.github/workflows/deploy.yml`): Manual; runs resources provisioning.
+- **Destroy** (`.github/workflows/destroy.yml`): Manual; teardown.
