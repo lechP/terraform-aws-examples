@@ -50,12 +50,10 @@ After creation, Terraform outputs two values:
 
 Visit the URL in your browser. You should see a page similar to:
 
-    ```
     Hello from Terraform!
     Git commit SHA: <your SHA>
     Startup timestamp: <UTC time>
     Hostname: <instance hostname>
-    ```
 
 #### Verification Checklist
 
