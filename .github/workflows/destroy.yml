@@ -2,6 +2,10 @@ name: Destroy
 
 on:
   workflow_dispatch:
+    inputs:
+      example_name:
+        description: 'Name of the example to destroy'
+        required: true
 
 permissions:
   id-token: write   # REQUIRED for OIDC
@@ -28,6 +32,7 @@ jobs:
 
       - name: Terraform Destroy
         run: |
+          cd examples/${{ inputs.example_name }}
           terraform --version
           terraform init
           terraform destroy -auto-approve

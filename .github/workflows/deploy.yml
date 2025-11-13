@@ -1,7 +1,10 @@
 name: Deploy
-
 on:
   workflow_dispatch:
+    inputs:
+      example_name:
+        description: 'Name of the example to deploy'
+        required: true
 
 permissions:
   id-token: write   # REQUIRED for OIDC
@@ -19,7 +22,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::${{ secrets.ACCOUNT_ID }}:role/TerraformCiRole
-          aws-region: us-east-1
+          aws-region: eu-west-3
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -30,6 +33,7 @@ jobs:
         env:
           GIT_COMMIT: ${{ github.sha }}
         run: |
+          cd examples/${{ inputs.example_name }}
           terraform --version
           terraform init
           terraform plan -var "git_commit=$GIT_COMMIT"

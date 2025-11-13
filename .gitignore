@@ -24,3 +24,5 @@ terraform.tfvars
 
 .idea
 
+# because it is repository of examples, not a production one
+.terraform.lock.hcl

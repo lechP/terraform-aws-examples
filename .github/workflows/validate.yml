@@ -1,31 +1,77 @@
-name: Validate
+name: Validate All Examples
 
 on:
   push:
     branches: [ "**" ]
   pull_request:
     branches: [ "**" ]
+  workflow_dispatch:
 
 permissions:
-  id-token: write   # REQUIRED for OIDC
   contents: read
 
 jobs:
   validate:
+    name: Validate all Terraform examples
     runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        example:
+          # This list will be dynamically generated below
+          # You can also hardcode specific examples here if preferred
+          - placeholder
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Terraform
+      - name: Install Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 1.13.5
+          terraform_version: 1.9.5
 
-      - name: Terraform fmt & validate
+      - name: Discover examples
+        id: discover
         run: |
-          terraform --version
-          terraform fmt -check -diff || true
-          terraform init -backend=false
-          terraform validate
+          echo "Discovering Terraform examples..."
+          examples=$(find examples -mindepth 1 -maxdepth 1 -type d | sort)
+          echo "Found examples:"
+          echo "$examples"
+          # Export as JSON list for matrix
+          matrix=$(echo "$examples" | jq -R -s -c 'split("\n")[:-1]')
+          echo "matrix=$matrix" >> $GITHUB_OUTPUT
 
+    outputs:
+      matrix: ${{ steps.discover.outputs.matrix }}
+
+  validate_each:
+    name: Validate ${{ matrix.example }}
+    needs: validate
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        example: ${{ fromJson(needs.validate.outputs.matrix) }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.5
+
+      - name: Initialize Terraform
+        working-directory: ${{ matrix.example }}
+        run: terraform init -backend=false
+
+      - name: Validate Terraform configuration
+        working-directory: ${{ matrix.example }}
+        run: terraform validate
+
+      - name: Check Terraform formatting
+        working-directory: ${{ matrix.example }}
+        run: terraform fmt -check -recursive

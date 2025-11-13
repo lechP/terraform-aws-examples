@@ -5,24 +5,10 @@ terraform {
       version = "~> 5.0"
     }
   }
-
-  backend "s3" {
-    bucket         = "lpi-tfstate-3e1989"
-    key            = "sandbox/test/terraform.tfstate"
-    region         = "eu-west-3"
-    dynamodb_table = "tf-locks"
-    encrypt        = true
-  }
 }
 
 provider "aws" {
   region = "eu-west-3"
-}
-
-variable "git_commit" {
-  description = "Git commit SHA for this deployment"
-  type        = string
-  default     = "unknown"
 }
 
 # Security group allowing HTTP
@@ -114,15 +100,4 @@ data "aws_ami" "amazon_linux" {
     name   = "name"
     values = ["amzn2-ami-hvm-*-x86_64-gp2"]
   }
-}
-
-# Output public IP
-output "public_ip" {
-  value       = aws_instance.hello.public_ip
-  description = "Public IP of the hello EC2 instance"
-}
-
-output "hello_url" {
-  value       = "http://${aws_instance.hello.public_ip}"
-  description = "Open this in your browser"
 }
