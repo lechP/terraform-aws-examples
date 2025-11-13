@@ -81,12 +81,12 @@ resource "aws_instance" "hello" {
             systemctl enable httpd
             systemctl start httpd
 
-            HOSTNAME=$$(hostname)
-            TIMESTAMP=$$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+            HOSTNAME=$(hostname)
+            TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
             GIT_COMMIT="${var.git_commit}"
 
-            # Use single quotes around the heredoc delimiter to disable variable expansion by Terraform
-            cat <<HTML > /var/www/html/index.html
+            # Quote the heredoc delimiter so Bash writes the literal $${...} expressions
+            cat <<'HTML' > /var/www/html/index.html
             <html>
             <head><title>Hello from Terraform</title></head>
             <body>
