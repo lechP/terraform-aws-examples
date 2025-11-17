@@ -41,6 +41,15 @@ resource "aws_security_group" "hello_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  # ssh access for debugging
+  ingress {
+    description = "SSH"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -90,7 +99,7 @@ resource "aws_instance" "hello" {
 
               echo "<html><body><h1>Hello from Terraform!</h1>" > /var/www/html/index.html
               echo "<ul><li><b>Git commit SHA:</b> $${GIT_COMMIT}</li></ul>" >> /var/www/html/index.html
-              echo "<p>Mounted volume:</p><pre>\$(df -h | grep /data)</pre></body></html>" >> /var/www/html/index.html
+              echo "<p>Mounted volume:</p><pre>$$(df -h | grep /data)</pre></body></html>" >> /var/www/html/index.html
               EOF
 
   tags = {
