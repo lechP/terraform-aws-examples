@@ -87,20 +87,52 @@ resource "aws_instance" "hello" {
               systemctl enable httpd
               systemctl start httpd
 
-              # Create and mount EBS volume
-              if ! file -s /dev/xvdf | grep -q ext4; then
-                mkfs -t ext4 /dev/xvdf
-              fi
-              mkdir /data
-              mount /dev/xvdf /data
-              echo "/dev/xvdf /data ext4 defaults,nofail 0 2" >> /etc/fstab
+              # --- Wait for EBS device to appear (works for both /dev/xvdf and /dev/nvme1n1) ---
+              DEVICE="/dev/xvdf"
+              ALT_DEVICE="/dev/nvme1n1"
 
+              echo "Waiting for EBS device to be attached..." >> /var/log/user-data.log
+              for i in $(seq 1 30); do
+              if [ -b "$DEVICE" ]; then
+              FOUND=$DEVICE; break
+              elif [ -b "$ALT_DEVICE" ]; then
+              FOUND=$ALT_DEVICE; break
+              fi
+              sleep 3
+              done
+
+              if [ -z "$FOUND" ]; then
+              echo "EBS device not found after waiting, aborting." >> /var/log/user-data.log
+              exit 1
+              fi
+
+              # --- Format only if it doesn't already contain a filesystem ---
+              if ! blkid "$FOUND"; then
+              mkfs -t ext4 "$FOUND"
+              fi
+
+              mkdir -p /data
+              mount "$FOUND" /data
+              echo "$FOUND /data ext4 defaults,nofail 0 2" >> /etc/fstab
+
+              # --- Generate HTML page ---
               GIT_COMMIT="${var.git_commit}"
 
-              echo "<html><body><h1>Hello from Terraform!</h1>" > /var/www/html/index.html
-              echo "<ul><li><b>Git commit SHA:</b> $${GIT_COMMIT}</li></ul>" >> /var/www/html/index.html
-              echo "<p>Mounted volume:</p><pre>$$(df -h | grep /data)</pre></body></html>" >> /var/www/html/index.html
+              cat <<HTML > /var/www/html/index.html
+              <html>
+              <head><title>Hello from Terraform</title></head>
+              <body>
+                <h1>Hello from Terraform!</h1>
+                <ul>
+                  <li><b>Git commit SHA:</b> $${GIT_COMMIT}</li>
+                </ul>
+                <p>Mounted volume:</p>
+                <pre>$$(df -h | grep /data)</pre>
+              </body>
+              </html>
+              HTML
               EOF
+
 
   tags = {
     Name = "hello-from-terraform-ebs"
