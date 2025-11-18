@@ -65,8 +65,10 @@ To further verify the EBS volume persistence, you can perform the following step
 ```
 echo "Lorem ipsum" | sudo tee /data/test.txt
 sudo reboot
+[...wait for the instance to come back online...]
 cat /data/test.txt
 ```
+(When using EC2 Instance Connect, you may need to re-establish the session after reboot.)
 
 ### 4. Cleanup
 

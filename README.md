@@ -5,7 +5,7 @@ A curated collection of minimal AWS Terraform examples.
 | Example     | Description                        | Docs                                        |
 |-------------|------------------------------------|---------------------------------------------|
 | `ec2-basic` | Launch a single EC2 instance       | [README](examples/e001_ec2_basic/README.md) |
-| `ec2-efs`   | EC2 instance with attached EFS     | TBD                                         |
+| `ec2-efs`   | EC2 instance with attached EFS     | [README](examples/e002_ec2_ebs/README.md)   |
 | `ec2-lb`    | Load Balancer with two EC2 targets | TBD                                         |
 
 ## CI/CD Workflows (`.github/workflows`)
