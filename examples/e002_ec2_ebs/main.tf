@@ -117,6 +117,9 @@ resource "aws_instance" "hello" {
 
               # --- Generate HTML page ---
               GIT_COMMIT="${var.git_commit}"
+              # --- Collect filesystem info ---
+              MOUNT_INFO=$(df -h | grep /data || echo "Not mounted")
+
 
               cat <<HTML > /var/www/html/index.html
               <html>
@@ -127,7 +130,7 @@ resource "aws_instance" "hello" {
                   <li><b>Git commit SHA:</b> $${GIT_COMMIT}</li>
                 </ul>
                 <p>Mounted volume:</p>
-                <pre>$$(df -h | grep /data)</pre>
+                <pre>$${MOUNT_INFO}</pre>
               </body>
               </html>
               HTML

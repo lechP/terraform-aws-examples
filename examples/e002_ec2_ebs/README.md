@@ -57,6 +57,17 @@ You should see a page like this:
     Mounted volume:
     /dev/xvdf    1G    ...    /data
 
+Instead of `/dev/xvdf` it can be `/dev/nvme1n1` depending on the instance type.
+
+You can connect via SSH/EC2 Instance Connect to examine mounted volumes by calling `df -h`.
+
+To further verify the EBS volume persistence, you can perform the following steps:
+```
+echo "Lorem ipsum" | sudo tee /data/test.txt
+sudo reboot
+cat /data/test.txt
+```
+
 ### 4. Cleanup
 
 Destroy all created resources:
