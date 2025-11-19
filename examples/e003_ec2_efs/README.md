@@ -81,18 +81,26 @@ df -h | grep /data
 ```
 Expected output (approximate):
 ```
-fs-xxxxxx.efs.eu-west-3.amazonaws.com:/  8.0E  ...  /data
+127.0.0.1:/  8.0E  ...  /data
 ```
+
+```bash
+ls /var/run/efs/
+```
+You should see the EFS file system ID listed.
 
 ### 3. Test file sharing
 On **Instance 1**:
 ```bash
-echo "Hello from $(hostname)" > /data/testfile.txt
+sudo mkdir -p /data/shared
+sudo chown ec2-user:ec2-user /data/shared
+echo "Hello from $(hostname)" >> /data/shared/note.txt
 ```
+First you create a directory to which then you give ownership to the `ec2-user` so that you can write files there without `sudo`.
 
 On **Instance 2**:
 ```bash
-cat /data/testfile.txt
+cat /data/shared/note.txt
 ```
 You should see the content written by Instance 1, confirming shared storage.
 
