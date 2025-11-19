@@ -120,7 +120,7 @@ resource "aws_instance" "instance_1_with_efs" {
   instance_type               = "t3.micro"
   subnet_id                   = local.subnet_a_id
   vpc_security_group_ids      = [aws_security_group.instances_sg.id]
-  associate_public_ip_address = false
+  associate_public_ip_address = true
 
   user_data = templatefile("ec2_userdata.sh.tpl", {
     efs_id     = aws_efs_file_system.example_efs.id
@@ -143,7 +143,7 @@ resource "aws_instance" "instance_2_with_efs" {
   instance_type               = "t3.micro"
   subnet_id                   = local.subnet_b_id
   vpc_security_group_ids      = [aws_security_group.instances_sg.id]
-  associate_public_ip_address = false
+  associate_public_ip_address = true
 
   user_data = templatefile("ec2_userdata.sh.tpl", {
     efs_id     = aws_efs_file_system.example_efs.id
