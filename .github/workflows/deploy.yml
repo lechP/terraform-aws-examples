@@ -36,6 +36,14 @@ jobs:
           cd examples/${{ inputs.example_name }}
           terraform --version
           terraform init
-          terraform plan -var "git_commit=$GIT_COMMIT"
-          terraform apply -auto-approve -var "git_commit=$GIT_COMMIT"
+          # Detect whether launched example defines variable "git_commit"
+          if terraform providers schema -json | jq -e '.schema.terraform.variables | has("git_commit")' >/dev/null 2>&1; then
+            echo "Passing git_commit variable..."
+            VAR_ARGS="-var git_commit=$GIT_COMMIT"
+          else
+            echo "No git_commit variable in this example."
+            VAR_ARGS=""
+          fi
+          terraform plan $VAR_ARGS
+          terraform apply -auto-approve $VAR_ARGS
 
