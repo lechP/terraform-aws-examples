@@ -86,7 +86,7 @@ resource "aws_security_group" "instances_sg" {
 }
 
 resource "aws_lb" "load_balancer" {
-  name               = "e004_alb"
+  name               = "e004alb"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb_sg]
@@ -101,7 +101,7 @@ resource "aws_lb" "load_balancer" {
 }
 
 resource "aws_lb_target_group" "target_group" {
-  name     = "e004_tg"
+  name     = "e004tg"
   port     = 80
   protocol = "HTTP"
   vpc_id   = data.aws_vpc.default.id
