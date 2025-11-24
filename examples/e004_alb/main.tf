@@ -95,7 +95,7 @@ resource "aws_lb" "load_balancer" {
   enable_deletion_protection = true
 
   tags = {
-    Name = "e004_alb"
+    Name    = "e004_alb"
     Example = local.example
   }
 }
@@ -147,10 +147,10 @@ data "aws_ami" "amazon_linux" {
 
 # EC2 instance
 resource "aws_instance" "instance_1" {
-  ami                         = data.aws_ami.amazon_linux.id
-  instance_type               = "t3.micro"
-  subnet_id                   = local.subnet_a_id
-  vpc_security_group_ids      = [aws_security_group.instances_sg.id]
+  ami                    = data.aws_ami.amazon_linux.id
+  instance_type          = "t3.micro"
+  subnet_id              = local.subnet_a_id
+  vpc_security_group_ids = [aws_security_group.instances_sg.id]
 
   user_data = <<-EOF
             #!/bin/bash
@@ -180,10 +180,10 @@ resource "aws_instance" "instance_1" {
 
 # EC2 instance
 resource "aws_instance" "instance_2" {
-  ami                         = data.aws_ami.amazon_linux.id
-  instance_type               = "t3.micro"
-  subnet_id                   = local.subnet_b_id
-  vpc_security_group_ids      = [aws_security_group.instances_sg.id]
+  ami                    = data.aws_ami.amazon_linux.id
+  instance_type          = "t3.micro"
+  subnet_id              = local.subnet_b_id
+  vpc_security_group_ids = [aws_security_group.instances_sg.id]
 
   user_data = <<-EOF
             #!/bin/bash
