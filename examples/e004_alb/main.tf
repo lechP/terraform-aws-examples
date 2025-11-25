@@ -51,7 +51,7 @@ resource "aws_security_group" "alb_sg" {
   }
 
   tags = {
-    Name    = "e004_instances_sg"
+    Name    = "e004_alb_sg"
     Example = local.example
   }
 
@@ -92,7 +92,7 @@ resource "aws_lb" "load_balancer" {
   security_groups    = [aws_security_group.alb_sg.id]
   subnets            = [local.subnet_a_id, local.subnet_b_id]
 
-  enable_deletion_protection = true
+  enable_deletion_protection = false
 
   tags = {
     Name    = "e004_alb"
