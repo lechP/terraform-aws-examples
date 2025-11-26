@@ -41,3 +41,12 @@ Both deploy and destroy rely on GitHub OIDC federation. Prerequisites:
 
 ### Example Folder Naming
 Pass only the folder name (e.g. `e001_ec2_basic`) to `example_name`; workflows internally `cd examples/${example_name}`.
+
+## Demo usage
+
+Some examples (starting from `e004`) use python scripts to test behavior after deployment. Python is being set up using
+`uv` for the whole project. To init and sync dependencies, run:
+
+```shell
+uv sync
+```

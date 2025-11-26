@@ -152,25 +152,7 @@ resource "aws_instance" "instance_1" {
   subnet_id              = local.subnet_a_id
   vpc_security_group_ids = [aws_security_group.instances_sg.id]
 
-  user_data = <<-EOF
-            #!/bin/bash
-            yum install -y httpd
-            systemctl enable httpd
-            systemctl start httpd
-
-            HOSTNAME=$(hostname)
-
-            cat <<HTML > /var/www/html/index.html
-            <html>
-            <head><title>Hello from Terraform</title></head>
-            <body>
-              <ul>
-                <li><b>Hostname:</b> $${HOSTNAME}</li>
-              </ul>
-            </body>
-            </html>
-            HTML
-            EOF
+  user_data = templatefile("ec2_userdata.sh.tpl")
 
   tags = {
     Name    = "ec2_instance_1"
@@ -185,25 +167,7 @@ resource "aws_instance" "instance_2" {
   subnet_id              = local.subnet_b_id
   vpc_security_group_ids = [aws_security_group.instances_sg.id]
 
-  user_data = <<-EOF
-            #!/bin/bash
-            yum install -y httpd
-            systemctl enable httpd
-            systemctl start httpd
-
-            HOSTNAME=$(hostname)
-
-            cat <<HTML > /var/www/html/index.html
-            <html>
-            <head><title>Hello from Terraform</title></head>
-            <body>
-              <ul>
-                <li><b>Hostname:</b> $${HOSTNAME}</li>
-              </ul>
-            </body>
-            </html>
-            HTML
-            EOF
+  user_data = templatefile("ec2_userdata.sh.tpl")
 
   tags = {
     Name    = "ec2_instance_2"
