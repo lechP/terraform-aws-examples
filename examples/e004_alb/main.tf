@@ -143,6 +143,35 @@ resource "aws_lb_listener" "load_balancer_listener" {
 }
 
 
+resource "aws_lb_listener_rule" "error_page" {
+  listener_arn = aws_lb_listener.load_balancer_listener.arn
+  priority     = 10
+
+  condition {
+    path_pattern {
+      values = ["/error"]
+    }
+  }
+
+  action {
+    type = "fixed-response"
+
+    fixed_response {
+      content_type = "text/html"
+      status_code  = "400"
+      message_body = <<EOF
+<html>
+  <body>
+    <h1>Error Page</h1>
+    <p>This is a custom ALB-level error page.</p>
+  </body>
+</html>
+EOF
+    }
+  }
+}
+
+
 # Latest Amazon Linux 2 AMI
 data "aws_ami" "amazon_linux" {
   most_recent = true

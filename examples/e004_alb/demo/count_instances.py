@@ -20,16 +20,17 @@ def main():
 
   counts = Counter()
 
-  print(f"Querying ALB: {args.url}")
+  print(f"Querying ALB: {args.url}/info.json")
   print(f"Sending {args.requests} requests...\n")
 
   for i in range(args.requests):
     try:
-      r = requests.get(args.url, timeout=2)
+      r = requests.get("http://" + args.url + "/info.json", timeout=2)
       r.raise_for_status()
       data = r.json()
       hostname = data.get("hostname", "unknown")
       counts[hostname] += 1
+      print(f"Request {i} succeeded: {hostname}")
     except Exception as e:
       print(f"Request {i} failed: {e}")
 
