@@ -152,7 +152,7 @@ resource "aws_instance" "instance_1" {
   subnet_id              = local.subnet_a_id
   vpc_security_group_ids = [aws_security_group.instances_sg.id]
 
-  user_data = templatefile("ec2_userdata.sh.tpl")
+  user_data = templatefile("ec2_userdata.sh.tpl", {})
 
   tags = {
     Name    = "ec2_instance_1"
@@ -167,7 +167,7 @@ resource "aws_instance" "instance_2" {
   subnet_id              = local.subnet_b_id
   vpc_security_group_ids = [aws_security_group.instances_sg.id]
 
-  user_data = templatefile("ec2_userdata.sh.tpl")
+  user_data = templatefile("ec2_userdata.sh.tpl", {})
 
   tags = {
     Name    = "ec2_instance_2"
