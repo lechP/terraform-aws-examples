@@ -65,11 +65,20 @@ resource "aws_security_group" "instances_sg" {
 
   # HTTP access from ALB
   ingress {
-    description     = "SSH"
+    description     = "HTTP"
     from_port       = 80
     to_port         = 80
     protocol        = "tcp"
     security_groups = [aws_security_group.alb_sg.id]
+  }
+
+  # ssh access for debugging
+  ingress {
+    description = "SSH"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
@@ -152,6 +161,8 @@ resource "aws_instance" "instance_1" {
   subnet_id              = local.subnet_a_id
   vpc_security_group_ids = [aws_security_group.instances_sg.id]
 
+  associate_public_ip_address = true
+
   user_data = templatefile("ec2_userdata.sh.tpl", {})
 
   tags = {
@@ -166,6 +177,8 @@ resource "aws_instance" "instance_2" {
   instance_type          = "t3.micro"
   subnet_id              = local.subnet_b_id
   vpc_security_group_ids = [aws_security_group.instances_sg.id]
+
+  associate_public_ip_address = true
 
   user_data = templatefile("ec2_userdata.sh.tpl", {})
 
