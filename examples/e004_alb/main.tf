@@ -183,10 +183,6 @@ resource "aws_instance" "instance_1" {
 
   user_data = templatefile("ec2_userdata.sh.tpl", {})
 
-  lifecycle {
-    user_data_replace_on_change = true
-  }
-
   tags = {
     Name    = "ec2_instance_1"
     Example = local.example
@@ -201,10 +197,6 @@ resource "aws_instance" "instance_2" {
   vpc_security_group_ids = [aws_security_group.instances_sg.id]
 
   user_data = templatefile("ec2_userdata.sh.tpl", {})
-
-  lifecycle {
-    user_data_replace_on_change = true
-  }
 
   tags = {
     Name    = "ec2_instance_2"

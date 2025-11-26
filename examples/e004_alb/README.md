@@ -139,8 +139,6 @@ and security groups.
 ## Notes
 
 -   Instances no longer expose SSH or public IPs (ALB-only access).\
--   `lifecycle { user_data_replace_on_change = true }` ensures EC2
-    instances are recreated when user_data changes.\
 -   Default VPC and subnets are used for simplicity; a production
     version should define its own VPC.\
 -   Demonstrates ALB fixed responses, custom rules, and backend health
