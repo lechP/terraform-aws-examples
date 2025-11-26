@@ -72,15 +72,6 @@ resource "aws_security_group" "instances_sg" {
     security_groups = [aws_security_group.alb_sg.id]
   }
 
-  # ssh access for debugging
-  ingress {
-    description = "SSH"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
   egress {
     from_port   = 0
     to_port     = 0
@@ -158,7 +149,7 @@ resource "aws_lb_listener_rule" "error_page" {
 
     fixed_response {
       content_type = "text/html"
-      status_code  = "400"
+      status_code  = "503"
       message_body = <<EOF
 <html>
   <body>
@@ -190,9 +181,11 @@ resource "aws_instance" "instance_1" {
   subnet_id              = local.subnet_a_id
   vpc_security_group_ids = [aws_security_group.instances_sg.id]
 
-  associate_public_ip_address = true
-
   user_data = templatefile("ec2_userdata.sh.tpl", {})
+
+  lifecycle {
+    user_data_replace_on_change = true
+  }
 
   tags = {
     Name    = "ec2_instance_1"
@@ -207,9 +200,11 @@ resource "aws_instance" "instance_2" {
   subnet_id              = local.subnet_b_id
   vpc_security_group_ids = [aws_security_group.instances_sg.id]
 
-  associate_public_ip_address = true
-
   user_data = templatefile("ec2_userdata.sh.tpl", {})
+
+  lifecycle {
+    user_data_replace_on_change = true
+  }
 
   tags = {
     Name    = "ec2_instance_2"
