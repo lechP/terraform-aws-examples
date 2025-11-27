@@ -22,7 +22,7 @@ locals {
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "5.0.0"
+  version = "~> 5.6.0"
 
   name = "e005-nlb-vpc"
   cidr = "10.100.0.0/16"
