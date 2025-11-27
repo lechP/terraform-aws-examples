@@ -24,7 +24,7 @@ module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.0.0"
 
-  name = "nlb-demo"
+  name = "e005-nlb-vpc"
   cidr = "10.100.0.0/16"
 
   azs             = [for az in var.azs : az]
@@ -32,6 +32,11 @@ module "vpc" {
   private_subnets = [for i in range(length(var.azs)) : cidrsubnet("10.100.0.0/16", 4, i + 4)]
 
   enable_nat_gateway = true
+
+  tags = {
+    Name    = "e005_nlb_vpc"
+    Example = local.example
+  }
 }
 
 # ------------------------------------------------------------------------------------
@@ -153,16 +158,16 @@ resource "aws_lb_target_group" "tg_canary" {
 }
 
 resource "aws_lb_target_group_attachment" "attachment_main" {
-  count             = 2
-  target_group_arn  = aws_lb_target_group.tg_main.arn
-  target_id         = aws_instance.app[count.index].id
-  port              = 80
+  count            = 2
+  target_group_arn = aws_lb_target_group.tg_main.arn
+  target_id        = aws_instance.app[count.index].id
+  port             = 80
 }
 
 resource "aws_lb_target_group_attachment" "attachment_canary" {
-  target_group_arn  = aws_lb_target_group.tg_canary.arn
-  target_id         = aws_instance.app[2].id # Attach the 3rd instance as canary
-  port              = 80
+  target_group_arn = aws_lb_target_group.tg_canary.arn
+  target_id        = aws_instance.app[2].id # Attach the 3rd instance as canary
+  port             = 80
 }
 
 # ------------------------------------------------------------------------------------

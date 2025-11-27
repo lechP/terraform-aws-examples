@@ -74,4 +74,4 @@ jobs:
 
       - name: Check Terraform formatting
         working-directory: ${{ matrix.example }}
-        run: terraform fmt -check -recursive
+        run: terraform fmt -check -recursive -diff
