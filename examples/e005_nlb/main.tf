@@ -32,6 +32,9 @@ module "vpc" {
   private_subnets = [for i in range(length(var.azs)) : cidrsubnet("10.100.0.0/16", 4, i + 4)]
 
   enable_nat_gateway = true
+  # use shared NAT gateway across AZs to reduce costs
+  single_nat_gateway = true
+  one_nat_gateway_per_az = false
 
   tags = {
     Name    = "e005_nlb_vpc"
@@ -82,6 +85,31 @@ data "aws_ami" "amazon_linux" {
   }
 }
 
+resource "aws_iam_role" "ssm_role" {
+  name = "ec2-ssm-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Effect = "Allow",
+      Principal = {
+        Service = "ec2.amazonaws.com"
+      },
+      Action = "sts:AssumeRole"
+    }]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "ssm_managed" {
+  role       = aws_iam_role.ssm_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+resource "aws_iam_instance_profile" "ssm_profile" {
+  name = "ec2-ssm-profile"
+  role = aws_iam_role.ssm_role.name
+}
+
 resource "aws_instance" "app" {
   count                       = 3
   ami                         = data.aws_ami.amazon_linux.id
@@ -89,6 +117,7 @@ resource "aws_instance" "app" {
   subnet_id                   = module.vpc.private_subnets[count.index]
   vpc_security_group_ids      = [aws_security_group.instance_sg.id]
   associate_public_ip_address = false
+  iam_instance_profile        = aws_iam_instance_profile.ssm_profile.name
 
   user_data = templatefile("ec2_userdata.sh.tpl", {})
 
