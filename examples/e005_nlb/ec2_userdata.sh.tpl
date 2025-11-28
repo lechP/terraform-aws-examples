@@ -1,7 +1,18 @@
 #!/bin/bash
-yum install -y httpd
+
+yum clean all
+yum makecache
+
+for attempt in {1..20}; do # await up to ~3 minutes for VPC to properly configure
+  yum install -y httpd && break
+  echo "yum install failed, retry $attempt..."
+  sleep 5
+done
+
 systemctl enable httpd
 systemctl start httpd
+
+mkdir -p /var/www/html
 
 HOSTNAME=$(hostname)
 TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
