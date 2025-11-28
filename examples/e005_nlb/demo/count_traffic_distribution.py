@@ -16,6 +16,7 @@ def run_test(url, requests_count):
   _results = Counter()
 
   for i in range(requests_count):
+    print(f"Request {i+1}/{requests_count}", end="\r")
     try:
       resp = requests.get(url, timeout=2)
       hostname = extract_hostname(resp.text)

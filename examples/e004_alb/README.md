@@ -63,7 +63,7 @@ ALB and prints how many responses come from each EC2 instance.
 Example:
 
 ``` bash
-uv run examples/e004_alb/count_instances.py --url $(terraform output -raw alb_dns_name)
+uv run examples/e004_alb/demo/count_instances.py --url $(terraform output -raw alb_dns_name)
 ```
 
 This confirms that the ALB distributes traffic across both targets.
@@ -118,7 +118,7 @@ You should see the custom ALB-level HTML response.
 ### 3. Test traffic distribution
 
 ``` bash
-uv run examples/e004_alb/count_instances.py --url $(terraform output -raw alb_dns_name)
+uv run examples/e004_alb/demo/count_instances.py --url $(terraform output -raw alb_dns_name)
 ```
 
 Sample output:

@@ -2,12 +2,13 @@
 
 A curated collection of minimal AWS Terraform examples.
 
-| Example     | Description                                    | Docs                                        |
-|-------------|------------------------------------------------|---------------------------------------------|
-| `ec2-basic` | Launch a single EC2 instance                   | [README](examples/e001_ec2_basic/README.md) |
-| `ec2-ebs`   | EC2 instance with attached EBS                 | [README](examples/e002_ec2_ebs/README.md)   |
-| `ec2-efs`   | EC2 instance with attached EFS                 | [README](examples/e003_ec2_efs/README.md)   |
-| `ec2-alb`   | Application Load Balancer with two EC2 targets | [README](examples/e004_alb/README.md)       |
+| Example     | Description                                          | Docs                                        |
+|-------------|------------------------------------------------------|---------------------------------------------|
+| `ec2-basic` | Launch a single EC2 instance                         | [README](examples/e001_ec2_basic/README.md) |
+| `ec2-ebs`   | EC2 instance with attached EBS                       | [README](examples/e002_ec2_ebs/README.md)   |
+| `ec2-efs`   | EC2 instance with attached EFS                       | [README](examples/e003_ec2_efs/README.md)   |
+| `ec2-alb`   | Application Load Balancer with two EC2 targets       | [README](examples/e004_alb/README.md)       |
+| `ec2-nlb`   | Network Load Balancer with main/canary target groups | [README](examples/e005_nlb/README.md)       |
 
 ## CI/CD Workflows (`.github/workflows`)
 
